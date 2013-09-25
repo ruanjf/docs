@@ -1,4 +1,4 @@
-<element name="tk-binding-to-elements">
+<polymer-element name="tk-binding-to-elements">
   <template>
     <p>This is <strong>{{owner}}</strong>'s tk-element but 
     <strong>{{name}}</strong> lets me borrow it. 
@@ -10,8 +10,8 @@
     <input id="nameInput" value="{{name}}" placeholder="Your name here...">
   </template>
   <script>
-    Polymer.register(this, {
-      age: "25",
+    Polymer('tk-binding-to-elements', {
+      age: 25,
       name: "Daniel",
       color: "red",
       owner: "Eric",
@@ -23,4 +23,4 @@
       }
     });
 </script>
-</element>
+</polymer-element>
