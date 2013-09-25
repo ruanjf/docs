@@ -11,8 +11,26 @@ pygments: false
 lsi: false
 safe: false
 
-exclude: ["node_modules", "README.md", "Gruntfile.js", "package.json"]
+#permalink: /news/:year/:month/:day/:title.html
+
+exclude: ["node_modules", "scripts", "sass", "app.yaml", "README.md",
+          "CONTRIBUTING.md", "Gruntfile.js", "package.json", "config.rb",
+          "build.py"]
+
+kramdown:
+  toc_levels: "2,3"
 
 # Site globals used throughout docs.
 load_platform: true
 project_title: Polymer
+latest_version: 0.0.20130912
+add_permalinks: true # adds permalinks to heading tags.
+load_disqus: true
+
+authors:
+  ebidel:
+    full_name: Eric Bidelman
+    gplus: 118075919496626375791
+    web: http://www.ericbidelman.com
+    twitter: ebidel
+    github: ebidel

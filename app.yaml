@@ -1,25 +1,88 @@
 application: polymer-project
-version: 2013-06-05
+version: 20130919
 runtime: python27
 api_version: 1
 threadsafe: yes
 
 #default_expiration: "0s"
 
+libraries:
+- name: PIL
+  version: latest
+
+inbound_services:
+- warmup
+
 handlers:
 
+# Top-level URLs ---------------------------------------------------------------
 - url: /$
   static_files: _site/index.html
   upload: _site/index\.html
 
-- url: /polymer
-  static_dir: polymer
+- url: /build/$
+  static_files: _site/build/index.html
+  upload: _site/build/index\.html
 
-- url: /toolkit-ui
-  static_dir: toolkit-ui
+- url: /build/(.*)
+  script: build.application
 
+- url: /polymer.min.js
+  static_files: js/polymer.min.js
+  upload: js/polymer\.min\.js
+
+- url: /polymer.min.js.map
+  static_files: js/polymer.min.js.map
+  upload: js/polymer\.min\.js.map
+
+# Map minified polymer to minified version.
+# This also preservers old URL (/polymer/polymer.min.js)
+- url: /(polymer-all\/)?polymer/polymer(.min)?.js
+  static_files: js/polymer.min.js
+  upload: js/polymer\.min\.js
+
+# / Elements -------------------------------------------------------------------
+- url: /(polymer|polymer-ui|more)-elements/(.*)
+  static_files: _site/polymer-all/\1-elements/\2
+  upload: _site/polymer-all/(polymer|polymer-ui|more)-elements/(.*)
+  http_headers:
+    Access-Control-Allow-Origin: "*"
+
+- url: /(toolkit-ui|web-animations-js)/(.*)
+  static_files: _site/polymer-all/\1/\2
+  upload: _site/polymer-all/(toolkit-ui|web-animations-js)/(.*)
+  http_headers:
+    Access-Control-Allow-Origin: "*"
+
+# /tools -----------------------------------------------------------------------
+  #curl https://polymer-project.org/tools/pull-all.sh | bash
+- url: /tools/pull-all\.sh$
+  static_files: _site/polymer-all/tools/bin/pull-all.sh
+  upload: _site/polymer-all/tools/bin/pull-all\.sh
+
+- url: /tools/sandbox/$
+  static_files: _site/polymer-all/projects/Sandbox/index.html
+  upload: _site/index\.html
+
+- url: /tools/sandbox/(.*)
+  static_files: _site/polymer-all/projects/Sandbox/\1
+  upload: _site/(.*)/index.html
+
+# Map raw paths with trailing "/" to an index.html file.
+- url: /(.*)/$
+  static_files: _site/\1/index.html
+  upload: _site/(.*)/index.html
+
+#- url: /polymer-all
+#  static_dir: _site/polymer-all
+#  http_headers:
+#    Access-Control-Allow-Origin: "*"
+
+# All other URLs map directly to their path in _site/.
 - url: /
   static_dir: _site
+  http_headers:
+    Access-Control-Allow-Origin: "*"
 
 skip_files:
 - ^(.*/)?app\.yaml
@@ -32,4 +95,7 @@ skip_files:
 - ^(.*/)?.*/RCS/.*
 - ^(.*/)?\..*
 - ^(.*/)?.*\.bak$
-- ^node_modules/.*
+- ^(.*/)?node_modules/.*
+- ^(.*/)?third_party/closure/.*
+- ^polymer-all/.*
+- ^scripts/.*

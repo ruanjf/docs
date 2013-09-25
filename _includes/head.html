@@ -1,9 +1,16 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="chrome=1" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta itemprop="name" content="Polymer">
-<meta itemprop="description" content="Polymer is a new type of library for the web, built on top of Web Components, and designed to leverage the evolving web platform on modern browsers.">
+
+<meta itemprop="name" content="{{site.project_title}}{% if page.title %} - {{page.title}}{% endif %}">
+<meta itemprop="description" content="{% if page.description %}{{page.description}}{% else %}Polymer is a new type of library for the web, built on top of Web Components, and designed to leverage the evolving web platform on modern browsers.{% endif %}">
+
+{% if page.snippet_img %}
+<meta itemprop="image" content="{{page.snippet_img}}">
+{% else %}
 <meta itemprop="image" content="http://www.polymer-project.org/images/instacod.png">
+{% endif %}
+
 <title>
   {% if page.title %}
     {{page.title}} - 
@@ -11,16 +18,23 @@
     Welcome - 
   {% endif %} {{site.project_title}}
 </title>
+<link rel="publisher" href="https://plus.google.com/107187849809354688692">
 <link rel="shortcut icon" href="/images/icons/loading_icon.png">
-<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-<link href="/css/prettify/sunburst.css" rel="stylesheet" type="text/css">
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/prettify/sunburst.css" rel="stylesheet">
+<link href="/css/font-awesome/font-awesome.min.css" rel="stylesheet">
 <!-- <link href="/css/pygments/default.css" rel="stylesheet" type="text/css"> -->
-<link href="/css/site.css?{{'now' | date: "%Y%m%d"}}" rel="stylesheet" type="text/css">
+<link href="/css/site.css?{{'now' | date: "%Y%m%d"}}" rel="stylesheet">
+
+{% for item in page.stylesheets %}
+  <link rel="stylesheet" src="{{item}}">
+{% endfor %}
 
 <script async>
 // Prevent usage of the appspot.com URL.
 try {
-  if (location.hostname.match('appspot.com')) {
+  if (location.hostname.match('appspot.com') &&
+      location.search.substring(1).split('&').indexOf('force') == -1) {
     window.location = location.protocol + '//www.polymer-project.org' + location.pathname;
   }
 } catch(e) {
@@ -29,14 +43,6 @@ try {
 </script>
 
 {% if site.load_platform %}
-<!--   
-  <script src="/polymer/polymer.min.js?{{'now' | date: "%Y%m%d"}}"></script>
- -->
-  {% for item in page.components %}
-    <link rel="import" src="{{ item }}">
-  {% endfor %}
-
-  {% for item in page.stylesheets %}
-    <link rel="stylesheet" src="{{ item }}">
-  {% endfor %}
+  <script src="/polymer.min.js?{{'now' | date: '%Y%m%d'}}"></script>
+  <link rel="import" src="/elements/common_elements.vulcanized.html">
 {% endif %}
